@@ -107,7 +107,7 @@
         <extensions>true</extensions>
         <configuration>
           <serverId>meltwater-releases</serverId>
-          <nexusUrl>>http://maven.meltwater.com/nexus/</nexusUrl>
+          <nexusUrl>http://maven.meltwater.com/nexus/</nexusUrl>
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
