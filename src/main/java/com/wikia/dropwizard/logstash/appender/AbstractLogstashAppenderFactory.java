@@ -1,14 +1,17 @@
 package com.wikia.dropwizard.logstash.appender;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.dropwizard.logging.AbstractAppenderFactory;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import java.util.HashMap;
 
 abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
+
   @NotNull
   protected String host;
 
@@ -21,6 +24,8 @@ abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
   protected boolean includeContext = true;
 
   protected boolean includeMdc = true;
+
+  protected boolean includeHostname = true;
 
   protected HashMap<String, String> customFields;
 
@@ -74,6 +79,16 @@ abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
   @JsonProperty
   public void setIncludeMdc(boolean includeMdc) {
     this.includeMdc = includeMdc;
+  }
+
+  @JsonProperty
+  public boolean getIncludeHostname() {
+    return includeHostname;
+  }
+
+  @JsonProperty
+  public void setIncludeHostname(boolean includeHostname) {
+    this.includeHostname = includeHostname;
   }
 
   @JsonProperty
