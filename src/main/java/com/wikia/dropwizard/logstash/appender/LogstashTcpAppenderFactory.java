@@ -23,10 +23,6 @@ public class LogstashTcpAppenderFactory extends AbstractLogstashAppenderFactory 
   @Max(65535)
   private int queueSize = LogstashTcpSocketAppender.DEFAULT_QUEUE_SIZE;
 
-  public LogstashTcpAppenderFactory() {
-    this.port = LogstashTcpSocketAppender.DEFAULT_PORT;
-  }
-
   @JsonProperty
   public void setIncludeCallerData(boolean includeCallerData) {
     this.includeCallerData = includeCallerData;
@@ -53,14 +49,13 @@ public class LogstashTcpAppenderFactory extends AbstractLogstashAppenderFactory 
 
     appender.setName("logstash-tcp-appender");
     appender.setContext(context);
-    appender.setRemoteHost(host);
-    appender.setPort(port);
+
+    appender.addDestination(destinations);
     appender.setIncludeCallerData(includeCallerData);
     appender.setQueueSize(queueSize);
 
     encoder.setIncludeContext(includeContext);
     encoder.setIncludeMdc(includeMdc);
-    encoder.setIncludeCallerInfo(includeCallerInfo);
 
     if (includeHostname) {
       if (customFields == null) {

@@ -31,7 +31,6 @@ public class LogstashSocketAppenderFactory extends AbstractLogstashAppenderFacto
     appender.setHost(host);
     appender.setPort(port);
 
-    appender.setIncludeCallerInfo(includeCallerInfo);
     appender.setIncludeMdc(includeMdc);
     appender.setIncludeContext(includeContext);
 

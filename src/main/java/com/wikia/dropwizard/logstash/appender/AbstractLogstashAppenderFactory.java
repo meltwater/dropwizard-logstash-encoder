@@ -1,25 +1,28 @@
 package com.wikia.dropwizard.logstash.appender;
 
+import com.google.common.base.Strings;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.dropwizard.logging.AbstractAppenderFactory;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import java.util.HashMap;
 
 abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
 
-  @NotNull
   protected String host;
 
-  @Min(1)
-  @Max(65535)
   protected int port;
 
-  protected boolean includeCallerInfo = false;
+  /**
+   * <p>The string is a comma separated list of destinations in the form of hostName[:portNumber].
+   *
+   * If portNumber is not provided, then the configured {@link #port} will be used, which defaults
+   * to {@value net.logstash.logback.appender.AbstractLogstashTcpSocketAppender#DEFAULT_PORT}
+   *
+   * For example, "host1.domain.com,host2.domain.com:5560"</p>
+   */
+  protected String destinations;
 
   protected boolean includeContext = true;
 
@@ -32,8 +35,28 @@ abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
   protected HashMap<String, String> fieldNames;
 
   @JsonProperty
+  public String getDestinations() {
+    return destinations;
+  }
+
+  @JsonProperty
+  public void setDestinations(String destinations) {
+    this.destinations = destinations;
+
+    String destinationsFromEnv = System.getenv("DWLSEnc_DESTINATIONS");
+    if (!Strings.isNullOrEmpty(destinationsFromEnv)) {
+      this.destinations = destinationsFromEnv;
+    }
+  }
+
+  @JsonProperty
   public void setHost(String host) {
     this.host = host;
+
+    String hostFromEnv = System.getenv("DWLSEnc_HOST");
+    if (!Strings.isNullOrEmpty(hostFromEnv)) {
+      this.host = hostFromEnv;
+    }
   }
 
   @JsonProperty
@@ -44,21 +67,16 @@ abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
   @JsonProperty
   public void setPort(int port) {
     this.port = port;
+
+    String portFromEnv = System.getenv("DWLSEnc_PORT");
+    if (!Strings.isNullOrEmpty(portFromEnv)) {
+      this.port = Integer.parseInt(portFromEnv);
+    }
   }
 
   @JsonProperty
   public int getPort() {
     return port;
-  }
-
-  @JsonProperty
-  public boolean getIncludeCallerInfo() {
-    return includeCallerInfo;
-  }
-
-  @JsonProperty
-  public void setIncludeCallerInfo(boolean includeCallerInfo) {
-    this.includeCallerInfo = includeCallerInfo;
   }
 
   @JsonProperty
