@@ -13,7 +13,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.HashMap;
 
 @JsonTypeName("logstash-tcp")
 public class LogstashTcpAppenderFactory extends AbstractLogstashAppenderFactory {
@@ -58,15 +57,23 @@ public class LogstashTcpAppenderFactory extends AbstractLogstashAppenderFactory 
     encoder.setIncludeMdc(includeMdc);
 
     if (includeHostname) {
-      if (customFields == null) {
-        customFields = new HashMap<>();
-      }
-
       try {
-        customFields.put("host", InetAddress.getLocalHost().getHostName());
+        addCustomField("host", InetAddress.getLocalHost().getHostName());
       } catch (IOException e) {
         System.out.println("unable to get hostname: " + e.getMessage());
       }
+    }
+
+    if (appId != null) {
+      addCustomField("appid", appId);
+    }
+
+    if (instanceId != null) {
+      addCustomField("instanceid", instanceId);
+    }
+
+    if (dockerHost != null) {
+      addCustomField("HOSTNAME", dockerHost);
     }
 
     if (customFields != null) {
