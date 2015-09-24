@@ -175,7 +175,7 @@ abstract class AbstractLogstashAppenderFactory extends AbstractAppenderFactory {
 
   @JsonProperty
   public void setInstanceId(String instanceId) {
-    this.instanceId = getEnvVariableOrElse("DOCKER_MWAPP_application_instanceid", instanceId);
+    this.instanceId = getEnvVariableOrElse("HOSTNAME", instanceId);
   }
 
   @JsonProperty
